@@ -1,0 +1,26 @@
+{
+  "name": "kinopio-logs-drain",
+  "version": "1.0.0",
+  "description": "sends kinopio-server logs to s3",
+  "author": "Pirijan",
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --optimize_for_size --max_old_space_size=460 --require esm index.js",
+    "serve": "nodemon --require esm index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.714.0",
+    "esm": "^3.2.25",
+    "heroku-log-parser": "^1.0.2",
+    "moment": "^2.27.0"
+  },
+  "engines": {
+    "node": "^12.14.1",
+    "npm": "^6.9.0"
+  }
+}
