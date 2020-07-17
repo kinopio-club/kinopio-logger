@@ -23,17 +23,18 @@ app.use(basicAuth({
 app.use(bodyParser.text({type: 'application/logplex-1'}))
 const server = http.createServer(app)
 
-let logs = []
 let logFile = ''
+let logs = []
 
 // start
 const port = process.env.PORT || 3000
 console.log('🔮 kinopio-logger localhost:' + port)
 server.listen(port)
 
-const newTimeRange = () => {
+const initLoggingInterval = () => {
  const timeRangeStart = moment().utc().format("MMM Do H.mma")
- // ... upload to s3 here (not sync) ...
+ console.log(logFile, logs)
+ // ... if logs.length , upload to s3 here (not sync) ...
  logFile = `${timeRangeStart}.log`
  logs = []
  console.log('🌷', logFile) // Jul 17th 17.10pm.log
@@ -42,10 +43,11 @@ const newTimeRange = () => {
 const normalizeMessage = (message) => {
   if (!message.msg) { return message }
   message.msg = message.msg.replaceAll('\"', '')
+console.log('👘👘👘👘👘',message.msg)
   return message
 }
 
-newTimeRange()
+initLoggingInterval()
 
 app.get('/', async (request, response) => {
   console.log('🌱')
@@ -60,40 +62,18 @@ app.post('/', async (request, response) => {
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
-    // if (!log.message.includes('Error L10')) {
-      console.log('🌸', normalizeMessage(log.message))
-      logs.push({
-        time: log.emitted_at,
-        message: normalizeMessage(log.message)
-      })
-    // }
+    const message = normalizeMessage(log.message)
+    console.log('🌸', message)
+    logs.push({
+      time: log.emitted_at,
+      message
+    })
   })
-
-  // if (parsedMessage[0].message.includes('Error L10')) { return }
-  // const log = {
-  //   time: parsedMessage[0].emitted_at,
-  //   message: parsedMessage[0].message
-  // }
-  // logs.push(log)
 })
 
 setInterval(() => {
-  newTimeRange()
-}, 3000) // -> process.env.INTERVAL
-
-
-// test
-// let incomingMessage = "156 <40>1 2012-11-30T06:45:26+00:00 heroku web.3 d.73ea7440-270a-435a-a0ea-adf50b4e5f5a - Starting process with command `bundle exec rackup config.ru -p 24405`"
-// let parsedMessage = herokuLogParser.parse(incomingMessage)
-
-
-// in post
-// logs.push({
-//   time: parsedMessage[0].emitted_at,
-//   message: parsedMessage[0].message
-// })
-// console.log(logs)
-
+  initLoggingInterval()
+}, 5000) // -> process.env.INTERVAL
 
 
 
@@ -113,9 +93,4 @@ setInterval(() => {
 // every hour (interval),
   // upload the file
   // make a new file and stream into that
-
-
-
-// when file upload complete, delete the file
-
-
+// when file upload complete, delete the file or clear the var
