@@ -38,16 +38,27 @@ const port = process.env.PORT || 3000
 console.log('🔮 kinopio-logger localhost:' + port)
 server.listen(port)
 
+const normalizeLogs = (logs) => {
+  logs = JSON.stringify(logs)
+  logs = logs.replaceAll('\\', '')
+  logs = logs.replaceAll('\"','')
+  logs = logs.replaceAll(',{', ',\n\n{')
+  return logs
+}
+
 const startLoggingInterval = () => {
   if (logs.length) {
-    // const buffer = { logStart, logs }
-    console.log('🍄🍄🍄',typeof logs, logs.toString(), JSON.stringify(logs))
+
+    console.log('🍄🍄🍄',typeof logs, JSON.stringify(logs))
+
+
+
     const buffer = {
       Body: JSON.stringify(logs),
       Key: `${logStart}.log`,
       Bucket: process.env.BUCKET_NAME
     }
-    console.log('🍆🍆🍆🍆🍆🍆🍆 upload to s3', typeof buffer.Body) // temp
+    console.log('🍆🍆🍆🍆🍆🍆🍆 upload to s3', typeof buffer.Body, normalizeLogs(logs)) // temp
     s3.putObject(buffer, (error, data) => {
       if (error) {
         console.error('🚒', error)
