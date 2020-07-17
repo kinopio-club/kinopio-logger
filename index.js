@@ -41,6 +41,7 @@ const initLoggingInterval = () => {
 }
 
 const normalizeMessage = (message) => {
+  message = JSON.parse(message)
   if (!message.msg) {
     console.log('🥬', typeof(message), message.msg)
     return message
