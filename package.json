@@ -15,7 +15,10 @@
   },
   "dependencies": {
     "aws-sdk": "^2.714.0",
+    "compression": "^1.7.4",
+    "dotenv": "^8.2.0",
     "esm": "^3.2.25",
+    "express": "^4.17.1",
     "heroku-log-parser": "^1.0.2",
     "moment": "^2.27.0"
   },

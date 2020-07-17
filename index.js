@@ -1,30 +1,82 @@
 // enable es6 module imports
 require = require("esm")(module) // eslint-disable-line no-global-assign
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
+import express from 'express'
+import http from 'http'
+import compression from 'compression'
 import herokuLogParser from 'heroku-log-parser'
 import fs from 'fs'
 import moment from 'moment'
 import S3 from 'aws-sdk/clients/s3'
 
+const app = express()
+app.use(compression())
+const server = http.createServer(app)
+
+let logs = []
+let timeRangeStart
+
+// start
+const port = process.env.PORT || 3000
+console.log('🔮 kinopio-logger localhost:' + port)
+server.listen(port)
+
+const newTimeRange = () => {
+ timeRangeStart = moment().utc().format("MMM Do H.mma")
+}
+
+app.get('/', async (request, response) => {
+  response.json({
+    message: 'kinopio-logger is online',
+    docs: 'https://github.com/kinopio-club/kinopio-logger'
+  })
+})
+
+app.post('/', async (request, response) => {
+  // todo add basic auth w env. HTTP_USER , HTTP_PASSWORD
+  console.log('🌸',request.body)
+  response.sendStatus(200)
+})
+
+// test
 let incomingMessage = "156 <40>1 2012-11-30T06:45:26+00:00 heroku web.3 d.73ea7440-270a-435a-a0ea-adf50b4e5f5a - Starting process with command `bundle exec rackup config.ru -p 24405`"
 let parsedMessage = herokuLogParser.parse(incomingMessage)
 
-const newFileName = () => {
- const timeStamp = moment().utc().format("MMM D - h mma")
- return `${timeStamp}.txt`
-}
 
-console.log(parsedMessage)
-console.log('🍄', newFileName())
-console.log(parsedMessage[0].emitted_at, parsedMessage[0].message)
+// in post
+newTimeRange()
+console.log('🌷', `${timeRangeStart}.log`)
+logs.push({
+  time: parsedMessage[0].emitted_at,
+  message: parsedMessage[0].message
+})
+console.log(logs)
 
 
 
-// receive drain messages
 
-// make a read stream to a file
+
+// receive https drain messages from kinopio-server
+  // add express that receives POST /message
+    // GET / w standard server 200 message
+
+// make a read stream to a file based on the day (eg Jul 1.log),
+  // aws sdk may let me just append lines/updates to a file
+// every hour update the day being uploaded to
+
+
+// OR
+
+// make a read stream to a local file
 // every hour (interval),
   // upload the file
   // make a new file and stream into that
 
+
+
 // when file upload complete, delete the file
+
+
