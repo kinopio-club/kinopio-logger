@@ -68,8 +68,8 @@ app.post('/', async (request, response) => {
   parsedMessage.forEach(log => {
     // const message = normalizeMessage(log.message)
     // if (log.message) {
-    console.log('🍆', log.message)
-    log.message = log.message.replaceAll('\"', "'")
+    console.log('🍆', log.message.msg)
+    log.message.msg = log.message.msg.replaceAll('\"', "'")
     // }
     console.log('🌸', message)
     logs.push({
