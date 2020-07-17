@@ -37,12 +37,12 @@ const initLoggingInterval = () => {
  // ... if logs.length , upload to s3 here (not sync) ...
  logFile = `${timeRangeStart}.log`
  logs = []
- console.log('🌷', logFile) // Jul 17th 17.10pm.log
+ console.log('🌷', logFile.length) // Jul 17th 17.10pm.log
 }
 
 const normalizeMessage = (message) => {
   if (!message.msg) { return message }
-  message.msg = message.msg.replaceAll('\"', '')
+  message.msg = message.msg.replaceAll('\"', "'")
 console.log('👘👘👘👘👘',message.msg)
   return message
 }
