@@ -71,10 +71,10 @@ app.post('/', async (request, response) => {
     // log.message.msg = log.message.msg.replaceAll('\"', "'")
     // }
     // console.log('🌸', typeof log.message, log.message, log.message.msg)
-    console.log('👘', log.message.replaceAll('\"', "'"))
+    console.log('👘', log.message.split('\"').join("'"))
     logs.push({
       time: log.emitted_at,
-      message: log.message.replaceAll('\"', "'")
+      message: log.message.split('\"').join("'")
     })
   })
 })
