@@ -47,16 +47,16 @@ app.get('/', async (request, response) => {
 })
 
 app.post('/', async (request, response) => {
-  // console.log('🌸',request)
-  console.log('🌹',typeof request.body, request.body)
-  // request.body.forEach(incomingMessage => {
   const parsedMessage = herokuLogParser.parse(request.body)
-  console.log('🌸', parsedMessage)
-  // })
-  response.set({
-    'Content-Length': '0',
-  })
+  response.set({ 'Content-Length': '0' })
   response.status(200).end()
+  if (parsedMessage[0].message.includes('Error L10')) { return }
+  const log = {
+    time: parsedMessage[0].emitted_at,
+    message: parsedMessage[0].message
+  }
+  console.log('🌸', log)
+  logs.push(log)
 })
 
 // test
