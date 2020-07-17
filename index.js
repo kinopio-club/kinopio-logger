@@ -52,7 +52,7 @@ app.get('/', async (request, response) => {
   })
 })
 
-app.post('/', async (request, response) => {
+app.post('/logs', async (request, response) => {
   console.log('🌸',request.body)
   response.set({
     'Content-Length': '0',
