@@ -38,27 +38,13 @@ const port = process.env.PORT || 3000
 console.log('🔮 kinopio-logger localhost:' + port)
 server.listen(port)
 
-const normalizeLogs = (logs) => {
-  logs = JSON.stringify(logs)
-  logs = logs.replaceAll('\\', '')
-  logs = logs.replaceAll('\"','')
-  logs = logs.replaceAll(',{', ',\n\n{')
-  return logs
-}
-
 const startLoggingInterval = () => {
   if (logs.length) {
-
-    console.log('🍄🍄🍄',typeof logs, JSON.stringify(logs))
-
-
-
     const buffer = {
       Body: JSON.stringify(logs),
       Key: `${logStart}.log`,
       Bucket: process.env.BUCKET_NAME
     }
-    console.log('🍆🍆🍆🍆🍆🍆🍆 upload to s3', typeof buffer.Body, normalizeLogs(logs)) // temp
     s3.putObject(buffer, (error, data) => {
       if (error) {
         console.error('🚒', error)
@@ -97,24 +83,4 @@ app.post('/', async (request, response) => {
 
 setInterval(() => {
   startLoggingInterval()
-}, 20000) // -> process.env.DURATION 2 hours
-
-
-
-
-// receive https drain messages from kinopio-server
-  // add express that receives POST /message
-    // GET / w standard server 200 message
-
-// make a read stream to a file based on the day (eg Jul 1.log),
-  // aws sdk may let me just append lines/updates to a file
-// every hour update the day being uploaded to
-
-
-// OR
-
-// make a read stream to a local file
-// every hour (interval),
-  // upload the file
-  // make a new file and stream into that
-// when file upload complete, delete the file or clear the var
+}, process.env.DURATION)
