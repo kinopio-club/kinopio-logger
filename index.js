@@ -24,7 +24,7 @@ app.use(bodyParser.text({type: 'application/logplex-1'}))
 const server = http.createServer(app)
 
 let logs = []
-let timeRangeStart
+let logFile = ''
 
 // start
 const port = process.env.PORT || 3000
@@ -32,8 +32,13 @@ console.log('🔮 kinopio-logger localhost:' + port)
 server.listen(port)
 
 const newTimeRange = () => {
- timeRangeStart = moment().utc().format("MMM Do H.mma")
- console.log('🌷', `${timeRangeStart}.log`)
+ const timeRangeStart = moment().utc().format("MMM Do H.mma")
+
+ // upload to s3 here (not sync)
+
+ logFile = `${timeRangeStart}.log`
+ logs = []
+ console.log('🌷', logFile) // Jul 17th 17.10pm.log
 }
 
 newTimeRange()
@@ -50,15 +55,21 @@ app.post('/', async (request, response) => {
   const parsedMessage = herokuLogParser.parse(request.body)
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
+  console.log('🌹',typeof request.body, parsedMessage)
+
   if (parsedMessage[0].message.includes('Error L10')) { return }
   const log = {
     time: parsedMessage[0].emitted_at,
     message: parsedMessage[0].message
   }
-  console.log('🌹',typeof request.body)
   console.log('🌸', log)
   logs.push(log)
 })
+
+setInterval(() => {
+  newTimeRange()
+}, 3000) // -> process.env.INTERVAL
+
 
 // test
 // let incomingMessage = "156 <40>1 2012-11-30T06:45:26+00:00 heroku web.3 d.73ea7440-270a-435a-a0ea-adf50b4e5f5a - Starting process with command `bundle exec rackup config.ru -p 24405`"
