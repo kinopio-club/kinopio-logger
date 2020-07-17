@@ -42,7 +42,7 @@ const initLoggingInterval = () => {
 
 const normalizeMessage = (message) => {
   if (!message.msg) {
-    console.log('🥬', message.msg)
+    console.log('🥬', typeof(message), message.msg)
     return message
   }
   message.msg = message.msg.replaceAll('\"', "'")
