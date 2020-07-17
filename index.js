@@ -33,6 +33,7 @@ server.listen(port)
 
 const newTimeRange = () => {
  timeRangeStart = moment().utc().format("MMM Do H.mma")
+ console.log('🌷', `${timeRangeStart}.log`)
 }
 
 newTimeRange()
@@ -47,11 +48,11 @@ app.get('/', async (request, response) => {
 
 app.post('/', async (request, response) => {
   // console.log('🌸',request)
-  // console.log('🌹',request.body)
-  request.body.forEach(incomingMessage => {
-    const log = herokuLogParser.parse(incomingMessage)
-    console.log('🌸', log)
-  })
+  console.log('🌹',typeof request.body, request.body)
+  // request.body.forEach(incomingMessage => {
+  const parsedMessage = herokuLogParser.parse(request.body)
+  console.log('🌸', parsedMessage)
+  // })
   response.set({
     'Content-Length': '0',
   })
@@ -64,7 +65,6 @@ app.post('/', async (request, response) => {
 
 
 // in post
-// console.log('🌷', `${timeRangeStart}.log`)
 // logs.push({
 //   time: parsedMessage[0].emitted_at,
 //   message: parsedMessage[0].message
