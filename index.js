@@ -71,7 +71,7 @@ app.post('/', async (request, response) => {
     // console.log('🍆', log.message.msg)
     // log.message.msg = log.message.msg.replaceAll('\"', "'")
     // }
-    console.log('🌸', log.message)
+    console.log('🌸', typeof log.message, log.message, log.message.msg)
     logs.push({
       time: log.emitted_at,
       message: log.message
