@@ -33,11 +33,10 @@ server.listen(port)
 
 const initLoggingInterval = () => {
  const timeRangeStart = moment().utc().format("MMM Do H.mma")
- console.log(logFile, logs)
+ console.log('🌷', logFile, logs.length) // Jul 17th 17.10pm.log
  // ... if logs.length , upload to s3 here (not sync) ...
  logFile = `${timeRangeStart}.log`
  logs = []
- console.log('🌷', logFile.length) // Jul 17th 17.10pm.log
 }
 
 // const normalizeMessage = (message) => {
@@ -71,10 +70,11 @@ app.post('/', async (request, response) => {
     // console.log('🍆', log.message.msg)
     // log.message.msg = log.message.msg.replaceAll('\"', "'")
     // }
-    console.log('🌸', typeof log.message, log.message, log.message.msg)
+    // console.log('🌸', typeof log.message, log.message, log.message.msg)
+    console.log('👘', log.message.replaceAll('\"', "'"))
     logs.push({
       time: log.emitted_at,
-      message: log.message
+      message: log.message.replaceAll('\"', "'")
     })
   })
 })
