@@ -10,9 +10,8 @@ import compression from 'compression'
 import basicAuth from 'express-basic-auth'
 import bodyParser from 'body-parser'
 import herokuLogParser from 'heroku-log-parser'
-import fs from 'fs'
 import moment from 'moment'
-import S3 from 'aws-sdk/clients/s3'
+import AWS from 'aws-sdk'
 
 const app = express()
 app.use(compression())
@@ -23,7 +22,15 @@ app.use(basicAuth({
 app.use(bodyParser.text({type: 'application/logplex-1'}))
 const server = http.createServer(app)
 
-let logPath = `${moment().utc().format("MMM Do H.mma")}.log`
+const endpoint = new AWS.Endpoint(process.env.S3_ENDPOINT)
+AWS.config.update({
+  accessKeyId: process.env.S3_ACCESS_KEY,
+  secretAccessKey: process.env.S3_SECRET_KEY,
+  endpoint: endpoint
+})
+const s3 = new AWS.S3()
+
+let logStart = moment().utc().format("MMM Do H.mma")
 let logs = []
 
 // start
@@ -33,11 +40,23 @@ server.listen(port)
 
 const startLoggingInterval = () => {
   if (logs.length) {
-    const buffer = { logPath, logs }
-    console.log('🍆🍆🍆🍆🍆🍆🍆 upload to s3', buffer.logs)
+    // const buffer = { logStart, logs }
+    const buffer = {
+      Body: logs,
+      Key: `${logStart}.log`,
+      Bucket: process.env.BUCKET_NAME
+    }
+    console.log('🍆🍆🍆🍆🍆🍆🍆 upload to s3', typeof buffer.Body) // temp
+    s3.putObject(buffer, (error, data) => {
+      if (error) {
+        console.error('🚒', error)
+      } else {
+        console.log(`🌹 ${buffer.Key} uploaded to ${buffer.Bucket}`)
+      }
+    })
   }
-  logPath = `${moment().utc().format("MMM Do H.mma")}.log`
-  console.log('🌹', logPath)
+  logStart = moment().utc().format("MMM Do H.mma")
+  console.log('🌱 new logging interval:', logStart)
   logs = []
 }
 
@@ -56,7 +75,7 @@ app.post('/', async (request, response) => {
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
-    console.log('🌱', log.message)
+    console.log('🚛', log.message)
     logs.push({
       time: log.emitted_at,
       message: log.message
@@ -66,7 +85,7 @@ app.post('/', async (request, response) => {
 
 setInterval(() => {
   startLoggingInterval()
-}, 20000) // -> process.env.DURATION
+}, 20000) // -> process.env.DURATION 2 hours
 
 
 
