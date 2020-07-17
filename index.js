@@ -57,13 +57,22 @@ app.post('/', async (request, response) => {
   response.status(200).end()
   console.log('🌹',typeof request.body, parsedMessage)
 
-  if (parsedMessage[0].message.includes('Error L10')) { return }
-  const log = {
-    time: parsedMessage[0].emitted_at,
-    message: parsedMessage[0].message
-  }
-  console.log('🌸', log)
-  logs.push(log)
+  parsedMessage.forEach(log => {
+    // if (!log.message.includes('Error L10')) {
+      console.log('🌸', log.message)
+      logs.push({
+        time: log.emitted_at,
+        message: log.message
+      })
+    // }
+  })
+
+  // if (parsedMessage[0].message.includes('Error L10')) { return }
+  // const log = {
+  //   time: parsedMessage[0].emitted_at,
+  //   message: parsedMessage[0].message
+  // }
+  // logs.push(log)
 })
 
 setInterval(() => {
