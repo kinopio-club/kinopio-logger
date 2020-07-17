@@ -40,16 +40,16 @@ const initLoggingInterval = () => {
  console.log('🌷', logFile.length) // Jul 17th 17.10pm.log
 }
 
-const normalizeMessage = (message) => {
-  console.log(message)
-  if (!message.msg) {
-    console.log('🥬', typeof(message), message.msg)
-    return message
-  }
-  message.msg = message.msg.replaceAll('\"', "'")
-console.log('👘👘👘👘👘',message.msg)
-  return message
-}
+// const normalizeMessage = (message) => {
+  // console.log(message)
+  // if (!message.msg) {
+  //   console.log('🥬', typeof(message), message.msg)
+  //   return message
+  // }
+//   message.msg = message.msg.replaceAll('\"', "'")
+// console.log('👘👘👘👘👘',message.msg)
+//   return message
+// }
 
 initLoggingInterval()
 
@@ -66,7 +66,8 @@ app.post('/', async (request, response) => {
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
-    const message = normalizeMessage(log.message)
+    // const message = normalizeMessage(log.message)
+    message.msg = message.msg.replaceAll('\"', "'")
     console.log('🌸', message)
     logs.push({
       time: log.emitted_at,
