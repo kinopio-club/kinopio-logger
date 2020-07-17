@@ -57,7 +57,7 @@ app.post('/', async (request, response) => {
   response.set({
     'Content-Length': '0',
   })
-  response.sendStatus(200)
+  response.status(200).end()
 })
 
 // test
