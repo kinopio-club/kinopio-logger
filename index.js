@@ -33,12 +33,17 @@ server.listen(port)
 
 const newTimeRange = () => {
  const timeRangeStart = moment().utc().format("MMM Do H.mma")
-
- // upload to s3 here (not sync)
-
+ // ... upload to s3 here (not sync) ...
  logFile = `${timeRangeStart}.log`
  logs = []
  console.log('🌷', logFile) // Jul 17th 17.10pm.log
+}
+
+const normalizeMessage = (message) => {
+  if (!message.msg) { return message }
+  const backslashes = new RegExp("\\\\","g")
+  message.msg = message.msg.replace(backslashes, "")
+  return message
 }
 
 newTimeRange()
@@ -55,14 +60,12 @@ app.post('/', async (request, response) => {
   const parsedMessage = herokuLogParser.parse(request.body)
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
-  console.log('🌹',typeof request.body, parsedMessage)
-
   parsedMessage.forEach(log => {
     // if (!log.message.includes('Error L10')) {
       console.log('🌸', log.message)
       logs.push({
         time: log.emitted_at,
-        message: log.message
+        message: normalizeMessage(log.message)
       })
     // }
   })
