@@ -15,4 +15,6 @@ settings → env values
 
 http://HTTP_USER:HTTP_PASSWORD@localhost:8002
 
-heroku drains:add https://HTTP_USER:HTTP_PASSWORD@kinopio-logs-drain.herokuapp.com/ --app kinopio-server
+heroku drains:add https://HTTP_USER:HTTP_PASSWORD@logger.kinopio.club/ --app kinopio-server
+
+accessible from https://logger.kinopio.club

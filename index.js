@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== 'production') {
 import express from 'express'
 import http from 'http'
 import compression from 'compression'
-import basicAuth from 'express-basic-auth'
+// import basicAuth from 'express-basic-auth'
 import herokuLogParser from 'heroku-log-parser'
 import fs from 'fs'
 import moment from 'moment'
@@ -15,10 +15,10 @@ import S3 from 'aws-sdk/clients/s3'
 
 const app = express()
 app.use(compression())
-app.use(basicAuth({
-    users: { [process.env.HTTP_USER]: process.env.HTTP_PASSWORD },
-    challenge: true
-}));
+// app.use(basicAuth({
+//     users: { [process.env.HTTP_USER]: process.env.HTTP_PASSWORD },
+//     challenge: true
+// }));
 const server = http.createServer(app)
 
 let logs = []
