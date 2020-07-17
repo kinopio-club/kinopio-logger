@@ -45,8 +45,11 @@ app.get('/', async (request, response) => {
 
 app.post('/', async (request, response) => {
   // console.log('🌸',request)
-  console.log('🌹',request.body)
-  console.log('🍆🍆🍆🍆🍆🍆')
+  // console.log('🌹',request.body)
+  request.body.forEach(incomingMessage => {
+    const log = herokuLogParser.parse(request.body)
+    console.log('🌸', log)
+  })
   response.set({
     'Content-Length': '0',
   })
