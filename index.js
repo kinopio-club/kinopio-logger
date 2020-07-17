@@ -35,6 +35,8 @@ const newTimeRange = () => {
  timeRangeStart = moment().utc().format("MMM Do H.mma")
 }
 
+newTimeRange()
+
 app.get('/', async (request, response) => {
   console.log('🌱')
   response.json({
@@ -62,13 +64,12 @@ app.post('/', async (request, response) => {
 
 
 // in post
-newTimeRange()
-console.log('🌷', `${timeRangeStart}.log`)
-logs.push({
-  time: parsedMessage[0].emitted_at,
-  message: parsedMessage[0].message
-})
-console.log(logs)
+// console.log('🌷', `${timeRangeStart}.log`)
+// logs.push({
+//   time: parsedMessage[0].emitted_at,
+//   message: parsedMessage[0].message
+// })
+// console.log(logs)
 
 
 
