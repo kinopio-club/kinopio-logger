@@ -41,7 +41,7 @@ server.listen(port)
 const startLoggingInterval = () => {
   if (logs.length) {
     // const buffer = { logStart, logs }
-    console.log(typeof logs)
+    console.log(typeof logs, logs.toString())
     const buffer = {
       Body: logs.toString(),
       Key: `${logStart}.log`,
