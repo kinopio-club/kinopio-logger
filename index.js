@@ -62,7 +62,7 @@ app.post('/', async (request, response) => {
   response.status(200).end()
   parsedMessage.forEach(log => {
     // if (!log.message.includes('Error L10')) {
-      console.log('🌸', log.message)
+      console.log('🌸', normalizeMessage(log.message))
       logs.push({
         time: log.emitted_at,
         message: normalizeMessage(log.message)
