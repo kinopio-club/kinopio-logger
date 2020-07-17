@@ -42,7 +42,8 @@ app.get('/', async (request, response) => {
 })
 
 app.post('/', async (request, response) => {
-  console.log('🌸',request.body)
+  console.log('🌸',request)
+  console.log(request.body)
   response.set({
     'Content-Length': '0',
   })
