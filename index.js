@@ -23,7 +23,7 @@ app.use(basicAuth({
 app.use(bodyParser.text({type: 'application/logplex-1'}))
 const server = http.createServer(app)
 
-let logFile = ''
+let logPath = `${moment().utc().format("MMM Do H.mma")}.log`
 let logs = []
 
 // start
@@ -31,26 +31,17 @@ const port = process.env.PORT || 3000
 console.log('🔮 kinopio-logger localhost:' + port)
 server.listen(port)
 
-const initLoggingInterval = () => {
- const timeRangeStart = moment().utc().format("MMM Do H.mma")
- console.log('🌷', logFile, logs.length) // Jul 17th 17.10pm.log
- // ... if logs.length , upload to s3 here (not sync) ...
- logFile = `${timeRangeStart}.log`
- logs = []
+const startLoggingInterval = () => {
+  if (logs.length) {
+    const buffer = { logPath, logs }
+    console.log('🍆🍆🍆🍆🍆🍆🍆 upload to s3', buffer.logs)
+  }
+  logPath = `${moment().utc().format("MMM Do H.mma")}.log`
+  console.log('🌹', logPath)
+  logs = []
 }
 
-// const normalizeMessage = (message) => {
-  // console.log(message)
-  // if (!message.msg) {
-  //   console.log('🥬', typeof(message), message.msg)
-  //   return message
-  // }
-//   message.msg = message.msg.replaceAll('\"', "'")
-// console.log('👘👘👘👘👘',message.msg)
-//   return message
-// }
-
-initLoggingInterval()
+startLoggingInterval()
 
 app.get('/', async (request, response) => {
   console.log('🌱')
@@ -65,23 +56,17 @@ app.post('/', async (request, response) => {
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
-    // const message = normalizeMessage(log.message)
-    // if (log.message) {
-    // console.log('🍆', log.message.msg)
-    // log.message.msg = log.message.msg.replaceAll('\"', "'")
-    // }
-    // console.log('🌸', typeof log.message, log.message, log.message.msg)
-    console.log('👘', log.message.split('\"').join("'"))
+    console.log('🌱', log.message)
     logs.push({
       time: log.emitted_at,
-      message: log.message.split('\"').join("'")
+      message: log.message
     })
   })
 })
 
 setInterval(() => {
-  initLoggingInterval()
-}, 5000) // -> process.env.INTERVAL
+  startLoggingInterval()
+}, 20000) // -> process.env.DURATION
 
 
 
