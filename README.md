@@ -11,3 +11,8 @@ settings → env values
   // make a new file and stream into that
 
 // when file upload complete, delete the file
+
+
+http://HTTP_USER:HTTP_PASSWORD@localhost:8002
+
+heroku drains:add https://HTTP_USER:HTTP_PASSWORD@kinopio-logs-drain.herokuapp.com/ --app kinopio-server

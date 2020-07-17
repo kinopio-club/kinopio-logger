@@ -19,6 +19,7 @@
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
     "heroku-log-parser": "^1.0.2",
     "moment": "^2.27.0"
   },

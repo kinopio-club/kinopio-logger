@@ -7,6 +7,7 @@ if (process.env.NODE_ENV !== 'production') {
 import express from 'express'
 import http from 'http'
 import compression from 'compression'
+import basicAuth from 'express-basic-auth'
 import herokuLogParser from 'heroku-log-parser'
 import fs from 'fs'
 import moment from 'moment'
@@ -14,6 +15,10 @@ import S3 from 'aws-sdk/clients/s3'
 
 const app = express()
 app.use(compression())
+app.use(basicAuth({
+    users: { [process.env.HTTP_USER]: process.env.HTTP_PASSWORD },
+    challenge: true
+}));
 const server = http.createServer(app)
 
 let logs = []
@@ -24,11 +29,23 @@ const port = process.env.PORT || 3000
 console.log('🔮 kinopio-logger localhost:' + port)
 server.listen(port)
 
+// const auth = (request, response, next) => {
+//   const user = basicAuth(request)
+//   if (!user || !user.name || !user.pass || user.name !== process.env.HTTP_USER || user.pass !== process.env.HTTP_PASSWORD) {
+//     response.set('WWW-Authenticate', 'Basic realm="Authorization required"');
+//     return response.status(401).send()
+//   } else {
+//     next()
+//   }
+// }
+
+
 const newTimeRange = () => {
  timeRangeStart = moment().utc().format("MMM Do H.mma")
 }
 
 app.get('/', async (request, response) => {
+  console.log('🌱')
   response.json({
     message: 'kinopio-logger is online',
     docs: 'https://github.com/kinopio-club/kinopio-logger'
@@ -36,7 +53,6 @@ app.get('/', async (request, response) => {
 })
 
 app.post('/', async (request, response) => {
-  // todo add basic auth w env. HTTP_USER , HTTP_PASSWORD
   console.log('🌸',request.body)
   response.sendStatus(200)
 })
