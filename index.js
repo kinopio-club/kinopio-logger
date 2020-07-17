@@ -8,6 +8,7 @@ import express from 'express'
 import http from 'http'
 import compression from 'compression'
 import basicAuth from 'express-basic-auth'
+import bodyParser from 'body-parser'
 import herokuLogParser from 'heroku-log-parser'
 import fs from 'fs'
 import moment from 'moment'
@@ -18,7 +19,8 @@ app.use(compression())
 app.use(basicAuth({
     users: { [process.env.HTTP_USER]: process.env.HTTP_PASSWORD },
     challenge: true
-}));
+}))
+app.use(bodyParser.text({type: 'application/logplex-1'}))
 const server = http.createServer(app)
 
 let logs = []
@@ -42,7 +44,7 @@ app.get('/', async (request, response) => {
 })
 
 app.post('/', async (request, response) => {
-  console.log('🌸',request)
+  // console.log('🌸',request)
   console.log('🌹',request.body)
   console.log('🍆🍆🍆🍆🍆🍆')
   response.set({
