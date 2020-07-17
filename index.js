@@ -41,8 +41,7 @@ const newTimeRange = () => {
 
 const normalizeMessage = (message) => {
   if (!message.msg) { return message }
-  const backslashes = new RegExp("\\\\","g")
-  message.msg = message.msg.replace(backslashes, "")
+  message.msg = message.msg.replaceAll('\"', '')
   return message
 }
 
