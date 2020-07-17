@@ -55,6 +55,7 @@ app.post('/', async (request, response) => {
     time: parsedMessage[0].emitted_at,
     message: parsedMessage[0].message
   }
+  console.log('🌹',typeof request.body)
   console.log('🌸', log)
   logs.push(log)
 })
