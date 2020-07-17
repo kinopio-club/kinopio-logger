@@ -47,7 +47,7 @@ app.post('/', async (request, response) => {
   // console.log('🌸',request)
   // console.log('🌹',request.body)
   request.body.forEach(incomingMessage => {
-    const log = herokuLogParser.parse(request.body)
+    const log = herokuLogParser.parse(incomingMessage)
     console.log('🌸', log)
   })
   response.set({
@@ -57,8 +57,8 @@ app.post('/', async (request, response) => {
 })
 
 // test
-let incomingMessage = "156 <40>1 2012-11-30T06:45:26+00:00 heroku web.3 d.73ea7440-270a-435a-a0ea-adf50b4e5f5a - Starting process with command `bundle exec rackup config.ru -p 24405`"
-let parsedMessage = herokuLogParser.parse(incomingMessage)
+// let incomingMessage = "156 <40>1 2012-11-30T06:45:26+00:00 heroku web.3 d.73ea7440-270a-435a-a0ea-adf50b4e5f5a - Starting process with command `bundle exec rackup config.ru -p 24405`"
+// let parsedMessage = herokuLogParser.parse(incomingMessage)
 
 
 // in post
