@@ -30,7 +30,7 @@ AWS.config.update({
 })
 const s3 = new AWS.S3()
 
-let logStart = moment().utc().format("MMM Do H.mma")
+let logStart = moment().utc().format("MMM Do h A")
 let logs = []
 
 // start
@@ -53,7 +53,7 @@ const startLoggingInterval = () => {
       }
     })
   }
-  logStart = moment().utc().format("MMM Do H.mma")
+  logStart = moment().utc().format("MMM Do h A")
   console.log('🌱 new logging interval:', logStart)
   logs = []
 }
@@ -73,7 +73,7 @@ app.post('/', async (request, response) => {
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
-    console.log('🚛', log.message)
+    console.log('🚛', log.message.msg || log.message)
     logs.push({
       time: log.emitted_at,
       message: log.message
