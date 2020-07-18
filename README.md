@@ -2,7 +2,7 @@
 
 <img src="https://kinopio-updates.us-east-1.linodeobjects.com/logger-diagram.png" width=500 />
 
-Receives [logs](https://devcenter.heroku.com/articles/log-drains) from a Heroku app, and periodically saves them to S3. Helpful for diagnosing errors in your Heroku metrics.
+Receives [logs](https://devcenter.heroku.com/articles/log-drains) from a Heroku app, and periodically saves them to S3. Helpful for diagnosing timestamped issues and events in your Heroku metrics.
 
 - Simpler and cheaper than a commercial logging service (Logstash, Timber etc.)
 - Supports saving to any S3 service: Digital Ocean, Linode, etc.
