@@ -14,7 +14,7 @@ You'll need the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 1. Fork then clone this repo
 2. Create a new app on Heroku, and connect your repo to it
 3. Configure (see below)
-4. Connect your logger to the app you want to log (i.e. SOURCE_APP) 
+4. Connect your logger to the source app you want to log
 ``` 
 $ heroku drains:add https://HTTP_USER:HTTP_PASSWORD@LOGGER_APP_NAME.herokuapp.com/ --app SOURCE_APP
 ```
