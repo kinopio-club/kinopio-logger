@@ -28,21 +28,17 @@ Production: Heroku dashboard → Settings → Config Vars
 
 ## ENV Variables
 
-env variables - table
-
-name[optional] description
-
 | Variable | Description | Example |
 |:--|:--|:--|
-| LOGGER_APP_NAME | The name of your logger app on heroku | app-logger |
-| DURATION (optional) | The period of time each log file should cover. Default is 1 hour | 3600000 |
-| HTTP_USER | The logger uses simple authentication to ensure only your source app can send logs to it | string |
-| HTTP_PASSWORD | Simple authentication password | string |
-| S3_ACCESS_KEY | Your S3 Access Key | string |
-| S3_SECRET_KEY | Your S3 Secret Key | string |
-| S3_ENDPOINT | The endpoint for the S3 service/region you want to use (see below) | https://s3.us-east-1.amazonaws.com |
-| BUCKET_NAME | The name of the S3 bucket to save in | app-logs |
-| PORT (optional) | Override the port used for localhost development | 3000 |
+| LOGGER_APP_NAME | The name of your logger app on heroku | `app-logger` |
+| DURATION (optional) | The period of time each log file should cover. Default is 1 hour | `3600000` |
+| HTTP_USER | The logger uses simple authentication to ensure only your source app can send logs to it | `string` |
+| HTTP_PASSWORD | Simple authentication password | `string` |
+| S3_ACCESS_KEY | Your S3 Access Key | `string` |
+| S3_SECRET_KEY | Your S3 Secret Key | `string` |
+| S3_ENDPOINT | The endpoint for the S3 service/region you want to use (see below) | `https://s3.us-east-1.amazonaws.com` |
+| BUCKET_NAME | The name of the S3 bucket to save in | `app-logs` |
+| PORT (optional) | Override the port used for localhost development | `3000` |
 
 ## S3_ENDPOINT
 
