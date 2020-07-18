@@ -83,4 +83,4 @@ app.post('/', async (request, response) => {
 
 setInterval(() => {
   startLoggingInterval()
-}, process.env.DURATION)
+}, process.env.DURATION || 3600000) // every hour
