@@ -30,7 +30,7 @@ AWS.config.update({
 })
 const s3 = new AWS.S3()
 
-let logStart = moment().utc().format("MMM Do h A")
+let logStart = ''
 let logs = []
 
 // start

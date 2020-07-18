@@ -1,5 +1,5 @@
 {
-  "name": "kinopio-logs-drain",
+  "name": "kinopio-logger",
   "version": "1.0.0",
   "description": "sends kinopio-server logs to s3",
   "author": "Pirijan",
