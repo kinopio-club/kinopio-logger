@@ -13,6 +13,9 @@ import herokuLogParser from 'heroku-log-parser'
 import moment from 'moment'
 import AWS from 'aws-sdk'
 
+let logStart = ''
+let logs = []
+
 const app = express()
 app.use(compression())
 app.use(basicAuth({
@@ -30,12 +33,9 @@ AWS.config.update({
 })
 const s3 = new AWS.S3()
 
-let logStart = ''
-let logs = []
-
 // start
 const port = process.env.PORT || 3000
-console.log('🔮 kinopio-logger localhost:' + port)
+console.log(`🔮 ${process.env.LOGGER_APP_NAME} localhost: ${port}`)
 server.listen(port)
 
 const startLoggingInterval = () => {
@@ -63,7 +63,7 @@ startLoggingInterval()
 app.get('/', async (request, response) => {
   console.log('🌱')
   response.json({
-    message: 'kinopio-logger is online',
+    message: `${process.env.LOGGER_APP_NAME} is online`,
     docs: 'https://github.com/kinopio-club/kinopio-logger'
   })
 })
