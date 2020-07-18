@@ -55,13 +55,13 @@ You can configure this logger to save log files to any S3 service. Some popular 
 
 # Run and Verify
 
-## Testing Locally
+## Local
 
     $ npm run serve
 
 Browsing to `http://localhost:PORT` should prompt you for your `HTTP_USER` and `HTTP_PASSWORD`
 
-## Testing Production
+## Production
 
 Verify that the logger is running and receiving logs
 
@@ -79,6 +79,6 @@ p.s. You use this text filter in BBEdit or Terminal to make the logs easier to r
 
 # Pull Requests Welcome
 
-Suggestion,
+Suggestions:
 
 - [ ] Create a ['Deploy to Heroku'](https://devcenter.heroku.com/articles/heroku-button) Button
