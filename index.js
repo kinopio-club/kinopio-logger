@@ -75,7 +75,7 @@ app.post('/', async (request, response) => {
   parsedMessage.forEach(log => {
     console.log('🚛', log.message.msg || log.message)
     logs.push({
-      time: log.emitted_at,
+      time: moment(log.emitted_at).utc().format('hh:mma'),
       message: log.message
     })
   })
