@@ -39,9 +39,10 @@ console.log(`🔮 ${process.env.LOGGER_APP_NAME} localhost: ${port}`)
 server.listen(port)
 
 const startLoggingInterval = () => {
-  if (logs.length) {
+  const isExistingLogs = logs.length
+  if (isExistingLogs) {
     const buffer = {
-      Body: JSON.stringify(logs),
+      Body: JSON.stringify(logs, null, 2), // spacing level = 2
       Key: `${logStart}.log`,
       Bucket: process.env.BUCKET_NAME
     }
@@ -70,13 +71,24 @@ app.get('/', async (request, response) => {
 
 app.post('/', async (request, response) => {
   const parsedMessage = herokuLogParser.parse(request.body)
+  const excludeStrings = [
+    "sql_error_code = 00000"
+  ]
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
-    console.log('🚛', log.message.msg || log.message)
+    const message = log.message
+    console.log('🍇', message.msg || message)
+    let shouldExclude
+    excludeStrings.forEach(excludeString => {
+      if (message.include(excludeString)) {
+        shouldExclude = true
+      }
+    })
+    if (shouldExclude) { return }
     logs.push({
       time: moment(log.emitted_at).utc().format('hh:mma'),
-      message: log.message
+      message
     })
   })
 })
