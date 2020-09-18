@@ -81,7 +81,7 @@ app.post('/', async (request, response) => {
     console.log('🍇', message.msg || message)
     let shouldExclude
     excludeStrings.forEach(excludeString => {
-      if (message.include(excludeString)) {
+      if (message.includes(excludeString)) {
         shouldExclude = true
       }
     })
