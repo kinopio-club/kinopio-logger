@@ -87,15 +87,14 @@ app.get('/', async (request, response) => {
 
 app.post('/', async (request, response) => {
   const parsedMessage = herokuLogParser.parse(request.body)
-  // const errorStrings = [
-  // ]
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
     let message = log.message.msg || log.message
-    console.log(typeof message)
-    if (typeof message === 'object') {
+    try {
       message = JSON.parse(message)
+    } catch (error) {
+      message = message
     }
     if (shouldExclude(message)) { return }
     delete message.level
