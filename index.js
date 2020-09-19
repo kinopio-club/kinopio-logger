@@ -79,8 +79,7 @@ app.post('/', async (request, response) => {
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
-    let message = JSON.parse(log.message)
-    message = message.msg || message
+    const message = log.message.msg || log.message
     let shouldExclude
     excludeStrings.forEach(excludeString => {
       if (message.includes(excludeString)) {
