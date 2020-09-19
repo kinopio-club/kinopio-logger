@@ -63,6 +63,20 @@ const startLoggingInterval = () => {
 
 startLoggingInterval()
 
+
+const shouldExcludeLog = (message) => {
+  const excludeStrings = [
+    "sql_error_code = 00000"
+  ]
+  let shouldExclude
+  excludeStrings.forEach(excludeString => {
+    if (message.includes(excludeString)) {
+      shouldExclude = true
+    }
+  })
+  return shouldExclude
+}
+
 app.get('/', async (request, response) => {
   console.log('🌱')
   response.json({
@@ -73,24 +87,17 @@ app.get('/', async (request, response) => {
 
 app.post('/', async (request, response) => {
   const parsedMessage = herokuLogParser.parse(request.body)
-  const excludeStrings = [
-    "sql_error_code = 00000"
-  ]
+  // const errorStrings = [
+  // ]
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
     let message = message.msg || message
     console.log(typeof message)
     if (typeof message === 'object') {
-      message = JSON.parse(log.message)
+      message = JSON.parse(message)
     }
-    let shouldExclude
-    excludeStrings.forEach(excludeString => {
-      if (message.includes(excludeString)) {
-        shouldExclude = true
-      }
-    })
-    if (shouldExclude) { return }
+    if (shouldExclude(message)) { return }
     delete message.level
     delete message.time
     delete message.pid
