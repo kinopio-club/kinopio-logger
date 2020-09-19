@@ -65,6 +65,7 @@ startLoggingInterval()
 
 
 const shouldExclude = (message) => {
+  if (typeof message !== 'string') { return }
   const excludeStrings = [
     "sql_error_code = 00000"
   ]
@@ -97,13 +98,15 @@ app.post('/', async (request, response) => {
       message = message
     }
     if (shouldExclude(message)) { return }
+    const time = moment(log.emitted_at).utc().format('hh:mma')
+
     delete message.level
     delete message.time
     delete message.pid
     delete message.hostname
     console.log('🐢', message)
     logs.push({
-      time: moment(log.emitted_at).utc().format('hh:mma'),
+      time,
       message
     })
   })
