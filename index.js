@@ -138,11 +138,11 @@ app.post('/', async (request, response) => {
     delete message.time
     delete message.pid
     delete message.hostname
-    const log = { time, message }
+    const logData = { time, message }
     let emoji = '🦜'
-    logs.push(log)
+    logs.push(logData)
     if (isError(message)) {
-      errorLogs.push(log)
+      errorLogs.push(logData)
       emoji = '🚒'
     }
     console.log(emoji, message)
