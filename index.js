@@ -64,7 +64,7 @@ const startLoggingInterval = () => {
 startLoggingInterval()
 
 
-const shouldExcludeLog = (message) => {
+const shouldExclude = (message) => {
   const excludeStrings = [
     "sql_error_code = 00000"
   ]
