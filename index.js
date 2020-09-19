@@ -15,6 +15,8 @@ import AWS from 'aws-sdk'
 
 let logStart = ''
 let logs = []
+let errorLogStart = ''
+let errorLogs = []
 
 const app = express()
 app.use(compression())
@@ -50,32 +52,65 @@ const startLoggingInterval = () => {
       if (error) {
         console.error('🚒', error)
       } else {
+        console.log('🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷')
+        console.log(`🌷 ${buffer.Key} uploaded to ${buffer.Bucket} 🌷`)
+        console.log('🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷🌷')
+      }
+    })
+  }
+  logStart = moment().utc().format("MMM Do h A")
+  console.log('⏰ new logging interval:', logStart)
+  logs = []
+}
+
+const startErrorLoggingInterval = () => {
+  const isExistingLogs = errorLogs.length
+  if (isExistingLogs) {
+    const buffer = {
+      Body: errorLogs, // JSON.stringify(errorLogs, null, 2), // spacing level = 2,
+      Key: `Errors – ${errorLogStart}.log`,
+      Bucket: process.env.BUCKET_NAME
+    }
+    s3.putObject(buffer, (error, data) => {
+      if (error) {
+        console.error('🚒', error)
+      } else {
         console.log('🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹')
         console.log(`🌹 ${buffer.Key} uploaded to ${buffer.Bucket} 🌹`)
         console.log('🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹')
       }
     })
   }
-  logStart = moment().utc().format("MMM Do h A")
-  console.log('🌱 new logging interval:', logStart)
-  logs = []
+  errorLogStart = moment().utc().format("MMM Do h A")
+  console.log('⏰ new error logging interval:', errorLogStart)
+  errorLogs = []
 }
 
 startLoggingInterval()
-
+startErrorLoggingInterval()
 
 const shouldExclude = (message) => {
   if (typeof message !== 'string') { return }
   const excludeStrings = [
     "sql_error_code = 00000"
   ]
-  let shouldExclude
-  excludeStrings.forEach(excludeString => {
-    if (message.includes(excludeString)) {
-      shouldExclude = true
-    }
+  const shouldExclude = excludeStrings.find(excludeString => {
+    return message.includes(excludeString)
   })
-  return shouldExclude
+  return Boolean(shouldExclude)
+}
+
+const isError = (message) => {
+  if (typeof message !== 'string') { return }
+  const errorStrings = [
+    'error',
+    'violation',
+    '🚒'
+  ]
+  const isError = errorStrings.find(errorString => {
+    return message.toLowerCase().includes(errorString)
+  })
+  return Boolean(isError)
 }
 
 app.get('/', async (request, response) => {
@@ -99,19 +134,22 @@ app.post('/', async (request, response) => {
     }
     if (shouldExclude(message)) { return }
     const time = moment(log.emitted_at).utc().format('hh:mma')
-
     delete message.level
     delete message.time
     delete message.pid
     delete message.hostname
-    console.log('🐢', message)
-    logs.push({
-      time,
-      message
-    })
+    const log = { time, message }
+    let emoji = '🦜'
+    logs.push(log)
+    if (isError(message)) {
+      errorLogs.push(log)
+      emoji = '🚒'
+    }
+    console.log(emoji, message)
   })
 })
 
 setInterval(() => {
   startLoggingInterval()
+  startErrorLoggingInterval()
 }, process.env.DURATION || 3600000) // every hour
