@@ -42,7 +42,7 @@ const startLoggingInterval = () => {
   const isExistingLogs = logs.length
   if (isExistingLogs) {
     const buffer = {
-      Body: JSON.stringify(logs, null, 2), // spacing level = 2
+      Body: logs, // JSON.stringify(logs, null, 2), // spacing level = 2,
       Key: `${logStart}.log`,
       Bucket: process.env.BUCKET_NAME
     }
@@ -50,7 +50,9 @@ const startLoggingInterval = () => {
       if (error) {
         console.error('🚒', error)
       } else {
-        console.log(`🌹 ${buffer.Key} uploaded to ${buffer.Bucket}`)
+        console.log('🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹')
+        console.log(`🌹 ${buffer.Key} uploaded to ${buffer.Bucket} 🌹`)
+        console.log('🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹')
       }
     })
   }
@@ -77,8 +79,8 @@ app.post('/', async (request, response) => {
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
-    const message = log.message
-    console.log('🍇', message.msg || message)
+    let message = JSON.parse(log.message)
+    message = message.msg || message
     let shouldExclude
     excludeStrings.forEach(excludeString => {
       if (message.includes(excludeString)) {
@@ -86,6 +88,11 @@ app.post('/', async (request, response) => {
       }
     })
     if (shouldExclude) { return }
+    delete message.level
+    delete message.time
+    delete message.pid
+    delete message.hostname
+    console.log('🐢', message)
     logs.push({
       time: moment(log.emitted_at).utc().format('hh:mma'),
       message
