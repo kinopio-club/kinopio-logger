@@ -92,7 +92,7 @@ app.post('/', async (request, response) => {
   response.set({ 'Content-Length': '0' })
   response.status(200).end()
   parsedMessage.forEach(log => {
-    let message = message.msg || message
+    let message = log.message.msg || log.message
     console.log(typeof message)
     if (typeof message === 'object') {
       message = JSON.parse(message)
