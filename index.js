@@ -100,7 +100,7 @@ const shouldExclude = (message) => {
     "sql_error_code = 00000"
   ]
   const shouldExclude = excludeStrings.find(excludeString => {
-    return message.includes(excludeString)
+    return message.msg.includes(excludeString)
   })
   return Boolean(shouldExclude)
 }
@@ -111,7 +111,7 @@ const shouldExcludeFromErrors = (message) => {
     "Error L10 (output buffer overflow)"
   ]
   const shouldExclude = excludeStrings.find(excludeString => {
-    return message.includes(excludeString)
+    return message.msg.includes(excludeString)
   })
   return Boolean(shouldExclude)
 }
