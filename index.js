@@ -37,10 +37,11 @@ AWS.config.update({
 })
 const s3 = new AWS.S3()
 
-// start
 const port = process.env.PORT || 3000
 console.log(`🔮 ${process.env.LOGGER_APP_NAME} localhost: ${port}`)
 server.listen(port)
+
+// Start Logging
 
 const startLoggingInterval = () => {
   const isExistingLogs = logs.length
@@ -91,6 +92,8 @@ const startErrorLoggingInterval = () => {
 startLoggingInterval()
 startErrorLoggingInterval()
 
+// Utils
+
 const shouldExclude = (message) => {
   if (typeof message !== 'string') { return }
   const excludeStrings = [
@@ -125,6 +128,8 @@ const isError = (message) => {
   })
   return Boolean(isError)
 }
+
+// Routes
 
 app.get('/', async (request, response) => {
   console.log('🌱')
