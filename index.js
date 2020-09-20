@@ -102,6 +102,17 @@ const shouldExclude = (message) => {
   return Boolean(shouldExclude)
 }
 
+const shouldExcludeFromErrors = (message) => {
+  if (typeof message !== 'string') { return }
+  const excludeStrings = [
+    "Error L10 (output buffer overflow)"
+  ]
+  const shouldExclude = excludeStrings.find(excludeString => {
+    return message.includes(excludeString)
+  })
+  return Boolean(shouldExclude)
+}
+
 const isError = (message) => {
   if (typeof message !== 'string') { return }
   const errorStrings = [
@@ -144,7 +155,9 @@ app.post('/', async (request, response) => {
     let emoji = '🦜'
     logs.push(logData)
     if (isError(message)) {
-      errorLogs.push(logData)
+      if (!shouldExcludeFromErrors(message)) {
+        errorLogs.push(logData)
+      }
       emoji = '🚒'
     }
     console.log(emoji, message)
