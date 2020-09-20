@@ -44,7 +44,7 @@ const startLoggingInterval = () => {
   const isExistingLogs = logs.length
   if (isExistingLogs) {
     const buffer = {
-      Body: logs, // JSON.stringify(logs, null, 2), // spacing level = 2,
+      Body: JSON.stringify(logs, null, 2), // spacing level = 2,
       Key: `${logStart}.log`,
       Bucket: process.env.BUCKET_NAME
     }
@@ -67,7 +67,7 @@ const startErrorLoggingInterval = () => {
   const isExistingLogs = errorLogs.length
   if (isExistingLogs) {
     const buffer = {
-      Body: errorLogs, // JSON.stringify(errorLogs, null, 2), // spacing level = 2,
+      Body: JSON.stringify(errorLogs, null, 2), // spacing level = 2,
       Key: `Errors – ${errorLogStart}.log`,
       Bucket: process.env.BUCKET_NAME
     }
