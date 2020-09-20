@@ -13,6 +13,7 @@ import herokuLogParser from 'heroku-log-parser'
 import AWS from 'aws-sdk'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 let logStart = ''
 let logs = []
