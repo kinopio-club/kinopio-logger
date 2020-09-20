@@ -10,8 +10,9 @@ import compression from 'compression'
 import basicAuth from 'express-basic-auth'
 import bodyParser from 'body-parser'
 import herokuLogParser from 'heroku-log-parser'
-import moment from 'moment'
 import AWS from 'aws-sdk'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 
 let logStart = ''
 let logs = []
@@ -58,7 +59,7 @@ const startLoggingInterval = () => {
       }
     })
   }
-  logStart = moment().utc().format("MMM Do h A")
+  logStart = dayjs.utc().format("MMM D h A")
   console.log('⏰ new logging interval:', logStart)
   logs = []
 }
@@ -81,7 +82,7 @@ const startErrorLoggingInterval = () => {
       }
     })
   }
-  errorLogStart = moment().utc().format("MMM Do h A")
+  errorLogStart = dayjs.utc().format("MMM D h A")
   console.log('⏰ new error logging interval:', errorLogStart)
   errorLogs = []
 }
@@ -133,7 +134,7 @@ app.post('/', async (request, response) => {
       message = message
     }
     if (shouldExclude(message)) { return }
-    const time = moment(log.emitted_at).utc().format('hh:mma')
+    const time = dayjs(log.emitted_at).utc().format('hh:mma')
     delete message.level
     delete message.time
     delete message.pid
