@@ -124,7 +124,7 @@ const isError = (message) => {
     '🚒'
   ]
   const isError = errorStrings.find(errorString => {
-    return message.toLowerCase().includes(errorString)
+    return message.msg.toLowerCase().includes(errorString)
   })
   return Boolean(isError)
 }
@@ -156,6 +156,7 @@ app.post('/', async (request, response) => {
     delete message.time
     delete message.pid
     delete message.hostname
+    delete message.v
     const logData = { time, message }
     let emoji = '🦜'
     logs.push(logData)
